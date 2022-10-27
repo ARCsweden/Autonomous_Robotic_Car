@@ -20,7 +20,7 @@ The robot should be able to move around and navigate a maze. It's proposed to us
 
 * TODO: What motors to use?
     - We have some NEMA17 stepper motors.
-    - TODO: Missing crimped cables, trying to order some.
+    - Crimped cables for interacting with the stepper motor are available (ordered crimped cables from Würth).
 * TODO: Test controlling the motors using a motor driver:
     - What motor driver to use? ArduinoShield v1.0/DkElectronics (some old board we have)
     - What controller code to use? Start with Arduino examples.
