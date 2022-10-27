@@ -63,6 +63,7 @@ A combination of many different sensors would make for a robust perception syste
 * IR cameras?
 * IR distance sensors?
 * Ping distance sensors?
+* LIDAR?
 * Tactile sensors (bumpers)?
 
 ### Computation
