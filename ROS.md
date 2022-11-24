@@ -48,6 +48,7 @@ As the number of ROS nodes in your project grows, it can be a good idea to use s
 * Use ros-launch files to set up a hierarchy of nodes, so your project can be run with a single command. The launch files can set up nodes and configure namespaces/topics in a simple manner.
 * Make use of the inspection tools of ROS2: rqt, rviz, rosbag etc. Seeing a graph of what topics are present in your system, which nodes publish/subscribe to them and what data flows through the system can greatly speed up debugging in complex systems.
 * ROS nodes and datatypes are organized in ROS packages. Split up your project in multiple reusable packages.
+* Instead of using raw print statements for debugging your nodes, use the ROS logger functionality. It allows for getting a timestamped log where all events in the system, regardless of what node caused them, can be collected.
 
 ## Optimizing your project
 
