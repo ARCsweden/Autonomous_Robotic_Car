@@ -33,6 +33,13 @@ Examples of topics can be a velocity, a position/direction, or something as comp
 
 Topics can be put in namespaces, so you can have multiple topics with the same name, but collected under a namespace. Example: `/motor_L/speed` and `/motor_R/speed`.
 
+Two other mechanisms of communication are used: services and actions. Look through the tutorials to find out which one fits the best in a given situation. In general:
+
+* Topics are channels for streaming a specific type of data.
+* Services are one-time call, and can be seen as remote function calls.
+* Actions are collections of topics that can be used to monitor the status of an ongoing operation.
+
+
 ## Organizing your project
 
 As the number of ROS nodes in your project grows, it can be a good idea to use some features of ROS2:
@@ -40,3 +47,10 @@ As the number of ROS nodes in your project grows, it can be a good idea to use s
 * Use predefined datatypes for topics. ROS2 is intended for Robotics, so many useful datatypes and even nodes are already present in the default installation.
 * Use ros-launch files to set up a hierarchy of nodes, so your project can be run with a single command. The launch files can set up nodes and configure namespaces/topics in a simple manner.
 * Make use of the inspection tools of ROS2: rqt, rviz, rosbag etc. Seeing a graph of what topics are present in your system, which nodes publish/subscribe to them and what data flows through the system can greatly speed up debugging in complex systems.
+* ROS nodes and datatypes are organized in ROS packages. Split up your project in multiple reusable packages.
+
+## Optimizing your project
+
+ROS will send data between different nodes using the network. If you are only on the local computer, this will be pretty fast, but it can still introduce some performance issue since the data of large topics still needs to be copied between processes.
+
+ROS2 has a concept called nodelets, which is a collection of c++ ROS nodes that execute as a single process, making the calling of topics as lightweight as calling a function/passing around a pointer. If the project has a lot of latency due to huge amounts of data being passed around, this can be a potential way to speed things up.
