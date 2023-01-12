@@ -18,12 +18,15 @@ There is a robotics competition we might aim to join with this platform; the Fir
 
 The robot should be able to move around and navigate a maze. It's proposed to use differential drive with two stepper motors mounted on opposite sides of the robot in east-west direction, and to use two free-moving ball-joints mounted in the north-south direction. This would allow full movement speed back and forward, and allow turning on the spot.
 
-* TODO: What motors to use?
-    - We have some NEMA17 stepper motors.
-    - Crimped cables for interacting with the stepper motor are available (ordered crimped cables from Würth).
-* TODO: Test controlling the motors using a motor driver:
-    - What motor driver to use? ArduinoShield v1.0/DkElectronics (some old board we have)
-    - What controller code to use? Start with Arduino examples.
+What motors to use?
+    - We have some micro motors RH158.12.75.
+    
+Test controlling the motors using a motor driver:
+    - DC motor control shield with BTN8982 Infineon
+    - Controlled by arduino
+* TODO: Test Encoders in Wheel mockup
+    - Using reflective sensors Pololu IRS01A with pattern on wheel inside
+    
 * TODO: The platform movement solution must be able to move the platform properly:
     - What is the target speed?
     - What weight will the platform including payload have?
