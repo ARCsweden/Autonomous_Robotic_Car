@@ -55,3 +55,30 @@ As the number of ROS nodes in your project grows, it can be a good idea to use s
 ROS will send data between different nodes using the network. If you are only on the local computer, this will be pretty fast, but it can still introduce some performance issue since the data of large topics still needs to be copied between processes.
 
 ROS2 has a concept called nodelets, which is a collection of c++ ROS nodes that execute as a single process, making the calling of topics as lightweight as calling a function/passing around a pointer. If the project has a lot of latency due to huge amounts of data being passed around, this can be a potential way to speed things up.
+
+## Creating packages
+
+ROS2 has multiple package build methods. The recommended build types are `ament_cmake` and `ament_python`. To create a new template-based package, run `ros2 pkg create`.
+
+## Building packages
+
+ROS2 uses the package builder `colcon`. First start by ensuring that ROS2 itself is sourced. Invoke the build with the command:
+
+```
+colcon build --symlink-install
+```
+
+This will elaborate the contents of the `src` directory and generate the `build`, `install` and `log` directories.
+
+To run any tests associated with the package, run:
+
+```
+colcon test
+```
+
+A package overlay that has been built can be sourced with:
+
+```
+. install/setup.bash
+```
+
