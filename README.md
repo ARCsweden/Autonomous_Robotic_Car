@@ -20,13 +20,13 @@ The robot should be able to move around and navigate a maze. It's proposed to us
 
 What motors to use?
     - We have some micro motors RH158.12.75.
-    
+
 Test controlling the motors using a motor driver:
     - DC motor control shield with BTN8982 Infineon
     - Controlled by arduino
 * TODO: Test Encoders in Wheel mockup
     - Using reflective sensors Pololu IRS01A with pattern on wheel inside
-    
+
 * TODO: The platform movement solution must be able to move the platform properly:
     - What is the target speed?
     - What weight will the platform including payload have?

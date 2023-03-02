@@ -82,3 +82,24 @@ A package overlay that has been built can be sourced with:
 . install/setup.bash
 ```
 
+## Launch files
+
+It's suggested to make launch files for complex ros systems. A launch file allows for starting any number of nodes in a controlled manner with only a single command. Launch files can be either written in Python, xml or yaml.
+
+The `package.xml` file should include the line `<exec_depend>ros2launch</exec_depend>`. In order for ros to detect the launch files, for C++ packages the `CMakeLists.txt` file need to include these lines:
+
+```
+# Install launch files.
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+```
+
+These lines should be added before the `ament_package()` line. The process for python based packages is different; new lines have to be added to `setup.py`.
+
+Run the launch file with:
+
+`ros2 launch <package> <launch-file>`
+
+This will launch all the nodes listed in the file, setting them up in the namespaces specified. Launch files can be called within launch files, creating a hierarchy. Launch files can be reused with parameter files.
