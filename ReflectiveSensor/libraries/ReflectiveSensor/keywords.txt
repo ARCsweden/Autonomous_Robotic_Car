@@ -1,0 +1,2 @@
+ReflectiveSensor	KEYWORD1
+get_reading	KEYWORD2
