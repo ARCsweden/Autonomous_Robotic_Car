@@ -1,2 +1,4 @@
 ReflectiveSensor	KEYWORD1
 get_reading	KEYWORD2
+update	KEYWORD2
+reset	KEYWORD2
