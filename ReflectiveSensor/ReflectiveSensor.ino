@@ -7,8 +7,8 @@ const int INHIBIT_1 = 12;
 const int INHIBIT_2 = 13;
 
 
-const int LEVEL = 200;
-const int EPSILON = 20;
+const int LEVEL = 60;
+const int EPSILON = 10;
 
 // Parameter is pin number sensor is connected on
 ReflectiveSensor left_encoder(3, LEVEL, EPSILON);
@@ -30,6 +30,8 @@ void setup() {
 }
 
 int oldTime = 0;
+int timeAcc = 0;
+int secondsCounter = 0;
 
 void loop() {
   int curTime = millis();
@@ -40,17 +42,31 @@ void loop() {
   left_encoder.update(diffTime);
   int speed = left_encoder.get_speed();
 
+  timeAcc += diffTime;
+
+  if(timeAcc >= 1000) {
+    secondsCounter++;
+    timeAcc -= 1000;
+    Serial.print("Time: ");
+    Serial.print(secondsCounter, DEC);
+    Serial.print("s Enc: ");
+    Serial.print(left_encoder.get_counter(), DEC);
+    Serial.print("\n");
+  }
+  
+  /*
+  Serial.print(left_encoder.get_sensor(), DEC);
+  Serial.print("\n");
+  */
 //  int right_val = right_encoder.get_reading();
   // Print out sensor value as a decimal number
 //  Serial.print("cnt: ");
 //  Serial.print(left_encoder.get_counter(), DEC);
 //  Serial.print(" L: ");
-  Serial.print(left_encoder.get_sensor(), DEC);
 //  Serial.print(" Speed: ");
 //  Serial.print(speed, DEC);
 //  Serial.print(" R: ");
 //  Serial.print(right_val, DEC);
-  Serial.print("\n");
 }
 
 // Value from -255 to 255
