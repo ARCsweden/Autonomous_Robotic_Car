@@ -5,6 +5,7 @@
 
 #include "Arduino.h"
 
+/* NOTE: Current implementation only supports one sensor per board */
 class ReflectiveSensor {
 public:
     ReflectiveSensor(int pin, int level = 200, int epsilon = 20);
@@ -24,7 +25,6 @@ public:
 private:
     int get_reading();
 
-    int mPin;
     int mLevel;
     int mEpsilon;
     int mCounter{};
