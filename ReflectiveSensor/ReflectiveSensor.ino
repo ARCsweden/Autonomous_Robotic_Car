@@ -37,8 +37,6 @@ void loop() {
   int diffTime = curTime - oldTime;
   oldTime = curTime;
 
-  // Read sensor value
-  encoder.update(diffTime);
   int speed = encoder.get_speed();
 
   timeAcc += diffTime;
@@ -51,6 +49,8 @@ void loop() {
     Serial.print(secondsCounter, DEC);
     Serial.print("s Enc: ");
     Serial.print(encoder.get_counter(), DEC);
+    Serial.print(" speed: ");
+    Serial.print(encoder.get_speed(), DEC);
     Serial.print("\n");
   }
 
