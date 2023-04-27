@@ -4,11 +4,11 @@
 
 int _sensor_pin = 0;
 unsigned long _old_time = 0;
-volatile int _sensor_reading = 0;
-volatile int _sensor_counter = 0;
-volatile int _sensor_time_since_last = 0;
+volatile unsigned long _sensor_reading = 0;
+volatile unsigned long _sensor_counter = 0;
+volatile unsigned long _sensor_time_since_last = 0;
 unsigned long _last_tick_time = 0;
-int _sensor_level = 0;
+unsigned long _sensor_level = 0;
 int _sensor_epsilon = 0;
 
 enum class FSM {
@@ -38,20 +38,25 @@ void _sensor_ISR() {
 
     switch(_fsm) {
         case FSM::WHITE:
-        if(_sensor_reading > _sensor_level + _sensor_epsilon) {
-            _fsm = FSM::BLACK;
-            // Increment the encoder count
-            _sensor_counter++;
-            // Set speed value to number of microseconds since last detected encoder tick
-            _sensor_time_since_last = cur_time - _last_tick_time;
-            _last_tick_time = cur_time;
-        }
-        break;
+            if(_sensor_reading > _sensor_level + _sensor_epsilon) {
+                _fsm = FSM::BLACK;
+                // Increment the encoder count
+                _sensor_counter++;
+                // Set speed value to number of microseconds since last detected encoder tick
+                _sensor_time_since_last = cur_time - _last_tick_time;
+                _last_tick_time = cur_time;
+            }
+            break;
         case FSM::BLACK:
-        if(_sensor_reading < _sensor_level - _sensor_epsilon) {
-            _fsm = FSM::WHITE;
-        }
-        break;
+            if(_sensor_reading < _sensor_level - _sensor_epsilon) {
+                _fsm = FSM::WHITE;
+            }
+            break;
+    }
+
+    const unsigned long SLOW_TIME = 500000;
+    if(cur_time - _last_tick_time >= SLOW_TIME) {
+        _sensor_time_since_last = 0;
     }
 
     // Trigger new read
@@ -60,7 +65,9 @@ void _sensor_ISR() {
     _old_time = micros();
 }
 
-ReflectiveSensor::ReflectiveSensor(int pin, int level, int epsilon) {
+ReflectiveSensor::ReflectiveSensor(int pin, int level, int epsilon, int num_markers)
+    : mNumMarkers(num_markers)
+{
     _sensor_pin = pin;
     _sensor_level = level;
     _sensor_epsilon = epsilon;
@@ -83,6 +90,7 @@ int ReflectiveSensor::get_counter() {
     return _sensor_counter;
 }
 
-int ReflectiveSensor::get_speed() {
-    return _sensor_time_since_last;
+double ReflectiveSensor::get_angular_speed() {
+    if(_sensor_time_since_last == 0) return 0;
+    return (360.f / mNumMarkers) * 1000000.f / _sensor_time_since_last;
 }
