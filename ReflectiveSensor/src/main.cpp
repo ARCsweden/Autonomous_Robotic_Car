@@ -43,14 +43,28 @@ int oldTime = 0;
 int timeAcc = 0;
 int secondsCounter = 0;
 
+/* PID Values */
+double integral_prior = 0;
+double error_prior = 0;
+
 void loop() {
     int curTime = millis();
     int diffTime = curTime - oldTime;
     oldTime = curTime;
 
+    /* PID calculations */
     pidInput = encoder.get_angular_speed();
-    double P = 0.5;
-    pidOutput = pidOutput + P * (pidSetpoint - pidInput);
+    const double Kp = 2;
+    const double Ki = 0.005;
+    const double Kd = 0;
+    double error = pidSetpoint - pidInput;
+    double integral = integral_prior + error * diffTime;
+    double derivate = diffTime != 0 ? (error - error_prior) / diffTime : 0;
+    pidOutput = Kp * error + Ki * integral + Kd * derivate;
+    integral_prior = integral;
+    error_prior = error;
+    /* End PID calculations */
+
     //myPID.Compute();
     int set_speed = pidOutput / 360.f * 255.f;
     motor.setSpeed(set_speed);
