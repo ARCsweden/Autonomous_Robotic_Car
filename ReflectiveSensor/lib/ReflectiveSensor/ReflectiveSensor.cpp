@@ -1,13 +1,14 @@
 /* ARCSweden 2023 */
 
 #include "ReflectiveSensor.h"
+#include <TimerOne.h>
 
 int _sensor_pin = 0;
-unsigned long _old_time = 0;
+volatile unsigned long _old_time = 0;
 volatile unsigned long _sensor_reading = 0;
 volatile unsigned long _sensor_counter = 0;
 volatile unsigned long _sensor_time_since_last = 0;
-unsigned long _last_tick_time = 0;
+volatile unsigned long _last_tick_time = 0;
 unsigned long _sensor_level = 0;
 int _sensor_epsilon = 0;
 
@@ -16,16 +17,19 @@ enum class FSM {
     BLACK,
 };
 
-
 FSM _fsm = FSM::WHITE;
 
 void _trigger_sensor() {
     // Load reflective sensor by driving pin at least 10us
     pinMode(_sensor_pin, OUTPUT);
     digitalWrite(_sensor_pin, HIGH);
-    delayMicroseconds(20); // TODO: Can test to reduce this
+    delayMicroseconds(50); // 10us required to charge cap
+    //digitalWrite(_sensor_pin, LOW);
+    //delayMicroseconds(10); // 10us required to charge cap
     // Set pin to input and wait until sensor has depleted
+    _old_time = micros();
     pinMode(_sensor_pin, INPUT);
+    EIFR = 0x01 << digitalPinToInterrupt(_sensor_pin);
 }
 
 void _sensor_ISR() {
@@ -58,11 +62,6 @@ void _sensor_ISR() {
     if(cur_time - _last_tick_time >= SLOW_TIME) {
         _sensor_time_since_last = 0;
     }
-
-    // Trigger new read
-    _trigger_sensor();
-
-    _old_time = micros();
 }
 
 ReflectiveSensor::ReflectiveSensor(int pin, int level, int epsilon, int num_markers)
@@ -72,8 +71,8 @@ ReflectiveSensor::ReflectiveSensor(int pin, int level, int epsilon, int num_mark
     _sensor_level = level;
     _sensor_epsilon = epsilon;
 
-    _trigger_sensor();
-
+    Timer1.initialize(1000000);
+    Timer1.attachInterrupt(_trigger_sensor);
     attachInterrupt(digitalPinToInterrupt(pin), _sensor_ISR, FALLING);
 }
 

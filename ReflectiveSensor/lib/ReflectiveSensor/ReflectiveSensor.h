@@ -5,6 +5,9 @@
 
 #include "Arduino.h"
 
+// Polulu IRS1A
+// https://www.pololu.com/product/959
+
 /* NOTE: Current implementation only supports one sensor per board */
 class ReflectiveSensor {
 public:
