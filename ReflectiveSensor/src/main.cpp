@@ -20,6 +20,8 @@ ReflectiveSensor encoder(ENCODER_PIN, LEVEL, EPSILON);
 //Define Variables we'll be connecting to
 double pidSetpoint, pidInput, pidOutput;
 
+int direction = 1; // 1, -1
+
 //Specify the links and initial tuning parameters
 //PID myPID(&pidInput, &pidOutput, &pidSetpoint, 2, 5, 0, DIRECT);
 
@@ -65,9 +67,10 @@ void loop() {
     /* End PID calculations */
 
     //myPID.Compute();
-    pidOutput = constrain(pidOutput, -600, 600);
+    pidOutput = constrain(pidOutput, 0, 600);
     double set_speed = 255.f * pidOutput / 600.f;
-    //motor.setSpeed(set_speed);
+    // TODO: Direction not set in PID
+    //motor.setSpeed(set_speed * direction);
 
     timeAcc += diffTime;
     if(timeAcc >= 1000000ul) {
