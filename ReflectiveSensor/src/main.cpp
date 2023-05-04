@@ -58,10 +58,11 @@ void loop() {
     const double Kp = 0.5;
     const double Ki = 0;
     const double Kd = 0;
+    const double bias = 0;
     double error = pidSetpoint - pidInput;
     double integral = integral_prior + error * diffTime;
     double derivate = diffTime != 0 ? (error - error_prior) / diffTime : 0;
-    pidOutput = Kp * error + Ki * integral + Kd * derivate;
+    pidOutput = Kp * error + Ki * integral + Kd * derivate + bias;
     integral_prior = integral;
     error_prior = error;
     /* End PID calculations */
@@ -69,7 +70,7 @@ void loop() {
     //myPID.Compute();
     pidOutput = constrain(pidOutput, 0, 600);
     double set_speed = 255.f * pidOutput / 600.f;
-    // TODO: Direction not set in PID
+    // Direction not set by PID; it needs to be known by controlling code
     //motor.setSpeed(set_speed * direction);
 
     timeAcc += diffTime;
